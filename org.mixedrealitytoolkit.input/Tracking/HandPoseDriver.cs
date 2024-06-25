@@ -60,21 +60,20 @@ namespace MixedReality.Toolkit.Input
                 m_firstUpdate = false;
             }
 
-            // In case the position input action is not provided, we will try to polyfill it with the device position.
-            // Should be removed once we have universal hand interaction profile(s) across vendors.
+            // In case the pose input actions are not provided or not bound to a control, we will try to query the 
+            // `HandsAggregator` subsystem for the device's pose. This logic and class should be removed once we 
+            // have universal hand interaction profile(s) across vendors.
             bool missingPositionController = (trackingType.HasFlag(TrackingType.PositionOnly) || trackingType.HasFlag(TrackingType.RotationAndPosition)) &&
                 (positionInput.action == null || !positionInput.action.HasAnyControls());
 
             bool missingRotationController = (trackingType.HasFlag(TrackingType.RotationOnly) || trackingType.HasFlag(TrackingType.RotationAndPosition)) &&
                 (rotationInput.action == null || !rotationInput.action.HasAnyControls());
 
-            // If we are missing the position or rotation controller, we will try to polyfill the device pose.
-            // Should be removed once we have universal hand interaction profile(s) across vendors.
-            // We will also check the tracking state here to account for a bound but untracked interaction profile.
+            // We will also check the tracking state here to account for a bound action but untracked interaction profile.
             if ((missingPositionController || missingRotationController || IsTrackingNone()) &&
                 TryGetPolyfillDevicePose(out Pose devicePose))
             {
-                SetLocalTransform(devicePose.position, devicePose.rotation);
+                ForceSetLocalTransform(devicePose.position, devicePose.rotation);
             }
         }
         #endregion TrackedPoseDriver Overrides
@@ -190,19 +189,24 @@ namespace MixedReality.Toolkit.Input
         /// </summary>
         private void ForceTrackingStateUpdate()
         {
-            var trackingStateAction = trackingStateInput.action;
-            if (trackingStateAction != null && !trackingStateAction.enabled)
-            {
-                // Treat a disabled action as the default None value for the ReadValue call
-                m_trackingState = InputTrackingState.None;
-                return;
-            }
+            // Note, that the logic in this class is meant to reproduce the same logic as the base. The base
+            // `TrackedPoseDriver` also sets the tracking state in a similar manner. Please see 
+            // `TrackedPoseDriver::ReadTrackingState`. Replicating this logic in a subclass is not ideal, but it is
+            // necessary since the base class does not expose the tracking state logic.
 
+            var trackingStateAction = trackingStateInput.action;
             if (trackingStateAction == null || trackingStateAction.bindings.Count == 0)
             {
                 // Treat an Input Action Reference with no reference the same as
                 // an enabled Input Action with no authored bindings, and allow driving the Transform pose.
                 m_trackingState = InputTrackingState.Position | InputTrackingState.Rotation;
+                return;
+            }
+
+            if (trackingStateAction.enabled)
+            {
+                // Treat a disabled action as the default None value for the ReadValue call
+                m_trackingState = InputTrackingState.None;
                 return;
             }
 
