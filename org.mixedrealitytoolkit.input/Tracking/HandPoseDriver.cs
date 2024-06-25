@@ -31,7 +31,7 @@ namespace MixedReality.Toolkit.Input
                 Mathf.Sqrt(1.5f) / 2.0f));
 
         private bool m_firstUpdate = true;
-        private bool m_trackingStateBound = false;
+        private InputAction m_boundTrackingAction = default;
         private InputTrackingState m_trackingState = InputTrackingState.None;
 
         #region Serialized Fields
@@ -53,10 +53,10 @@ namespace MixedReality.Toolkit.Input
         {
             base.PerformUpdate();
 
-            if (m_firstUpdate)
+            if (m_boundTrackingAction != trackingStateInput.action ||
+                m_firstUpdate)
             {
                 OnFirstUpdate();
-                m_firstUpdate = false;
             }
 
             // In case the position input action is not provided, we will try to polyfill it with the device position.
@@ -167,8 +167,10 @@ namespace MixedReality.Toolkit.Input
         ///  </summary>
         private void OnFirstUpdate()
         {
+            UnbindTrackingState();
             BindTrackingState();
             ForceTrackingStateUpdate();
+            m_firstUpdate = true;
         }
 
         /// <summary>
@@ -180,7 +182,6 @@ namespace MixedReality.Toolkit.Input
             if (!isActiveAndEnabled)
             {
                 UnbindTrackingState();
-                m_firstUpdate = false;
             }
         }
 
@@ -207,7 +208,7 @@ namespace MixedReality.Toolkit.Input
 
             if (trackingStateAction.HasAnyControls())
             {
-                m_trackingState = (InputTrackingState)trackingStateInput.action.ReadValue<int>();
+                m_trackingState = (InputTrackingState)trackingStateAction.ReadValue<int>();
             }
             else
             {
@@ -220,20 +221,20 @@ namespace MixedReality.Toolkit.Input
         /// </summary>
         private void BindTrackingState()
         {
-            if (m_trackingStateBound)
+            if (m_boundTrackingAction != null &&
+                m_boundTrackingAction == trackingStateInput.action)
             {
                 return;
             }
 
-            var action = trackingStateInput.action;
-            if (action == null)
+            m_boundTrackingAction = trackingStateInput.action;
+            if (m_boundTrackingAction == null)
             {
                 return;
             }
 
-            action.performed += OnTrackingStateInputPerformed;
-            action.canceled += OnTrackingStateInputCanceled;
-            m_trackingStateBound = true;
+            m_boundTrackingAction.performed += OnTrackingStateInputPerformed;
+            m_boundTrackingAction.canceled += OnTrackingStateInputCanceled;
         }
 
         /// <summary>
@@ -241,20 +242,14 @@ namespace MixedReality.Toolkit.Input
         /// </summary>
         private void UnbindTrackingState()
         {
-            if (!m_trackingStateBound)
+            if (m_boundTrackingAction == null)
             {
                 return;
             }
 
-            var action = trackingStateInput.action;
-            if (action == null)
-            {
-                return;
-            }
-
-            action.performed -= OnTrackingStateInputPerformed;
-            action.canceled -= OnTrackingStateInputCanceled;
-            m_trackingStateBound = false;
+            m_boundTrackingAction.performed -= OnTrackingStateInputPerformed;
+            m_boundTrackingAction.canceled -= OnTrackingStateInputCanceled;
+            m_boundTrackingAction = null;
         }
 
         private void OnTrackingStateInputPerformed(InputAction.CallbackContext context)
