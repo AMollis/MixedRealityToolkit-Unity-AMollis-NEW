@@ -31,7 +31,7 @@ namespace MixedReality.Toolkit.Input
                 Mathf.Sqrt(1.5f) / 2.0f));
 
         private bool m_firstUpdate = true;
-        private InputAction m_boundTrackingAction = default;
+        private InputAction m_boundTrackingAction = null;
         private InputTrackingState m_trackingState = InputTrackingState.None;
 
         #region Serialized Fields
@@ -53,19 +53,20 @@ namespace MixedReality.Toolkit.Input
         {
             base.PerformUpdate();
 
-            if (m_boundTrackingAction != trackingStateInput.action ||
-                m_firstUpdate)
+            if (m_firstUpdate ||
+                m_boundTrackingAction != trackingStateInput.action)
             {
                 OnFirstUpdate();
+                m_firstUpdate = false;
             }
 
             // In case the position input action is not provided, we will try to polyfill it with the device position.
             // Should be removed once we have universal hand interaction profile(s) across vendors.
             bool missingPositionController = (trackingType.HasFlag(TrackingType.PositionOnly) || trackingType.HasFlag(TrackingType.RotationAndPosition)) &&
-                !positionAction.HasAnyControls();
+                (positionInput.action == null || !positionInput.action.HasAnyControls());
 
             bool missingRotationController = (trackingType.HasFlag(TrackingType.RotationOnly) || trackingType.HasFlag(TrackingType.RotationAndPosition)) &&
-                !rotationAction.HasAnyControls();
+                (rotationInput.action == null || !rotationInput.action.HasAnyControls());
 
             // If we are missing the position or rotation controller, we will try to polyfill the device pose.
             // Should be removed once we have universal hand interaction profile(s) across vendors.
@@ -170,7 +171,6 @@ namespace MixedReality.Toolkit.Input
             UnbindTrackingState();
             BindTrackingState();
             ForceTrackingStateUpdate();
-            m_firstUpdate = true;
         }
 
         /// <summary>
@@ -179,7 +179,7 @@ namespace MixedReality.Toolkit.Input
         /// </summary>
         private void HandleDisablement()
         {
-            if (!isActiveAndEnabled)
+            if (!isActiveAndEnabled || !Application.isPlaying)
             {
                 UnbindTrackingState();
             }
@@ -221,8 +221,7 @@ namespace MixedReality.Toolkit.Input
         /// </summary>
         private void BindTrackingState()
         {
-            if (m_boundTrackingAction != null &&
-                m_boundTrackingAction == trackingStateInput.action)
+            if (m_boundTrackingAction != null)
             {
                 return;
             }

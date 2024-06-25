@@ -105,6 +105,10 @@ namespace MixedReality.Toolkit.Input
 
                     if (!selectActionValue.action.HasAnyControls() || isTrackingStatePolyfilled)
                     {
+                        if (pinchAmount > 0)
+                        {
+                            Debug.Log($"ATM selectActionValue is not bound to any control, or is being polyfilled. Setting selectInteractionState.value to {pinchAmount} (isTrackingStatePolyfilled = {isTrackingStatePolyfilled})");
+                        }
                         controllerState.selectInteractionState.value = pinchAmount;
                     }
 
@@ -118,6 +122,10 @@ namespace MixedReality.Toolkit.Input
 
                     if (!uiPressActionValue.action.HasAnyControls() || isTrackingStatePolyfilled)
                     {
+                        if (pinchAmount > 0)
+                        {
+                          //  Debug.Log($"ATM uiPressInteractionState is not bound to any control, or is being polyfilled. Setting selectInteractionState.value to {pinchAmount}  (isTrackingStatePolyfilled = {isTrackingStatePolyfilled})");
+                        }
                         controllerState.uiPressInteractionState.value = pinchAmount;
                     }
 
@@ -166,6 +174,7 @@ namespace MixedReality.Toolkit.Input
                 Mathf.Sqrt(0.125f),
                 -Mathf.Sqrt(1.5f) / 2.0f,
                 Mathf.Sqrt(1.5f) / 2.0f));
+
         private static readonly Quaternion leftPalmOffset = Quaternion.Inverse(
             new Quaternion(
                 Mathf.Sqrt(0.125f),

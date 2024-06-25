@@ -136,12 +136,19 @@ namespace MixedReality.Toolkit.Input
 #pragma warning disable CS0618 // Type or member is obsolete
                 if (forceDeprecatedInput)
                 {
+                    Debug.LogWarning($"Using controller for SelectProgres");
                     return xrController.selectInteractionState.value;
                 }
 #pragma warning restore CS0618
                 else if (selectInput != null)
                 {
-                    return selectInput.ReadValue();
+                    float value = selectInput.ReadValue();
+                    if (value <= 0.0)
+                    {
+                       //Debug.LogWarning($"Zero SelectProgress for {name}. Is the select input configured correctly?");
+                    }
+                    return value;
+
                 }
                 else
                 {

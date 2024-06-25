@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
 namespace MixedReality.Toolkit.Input.Simulation
@@ -13,7 +14,13 @@ namespace MixedReality.Toolkit.Input.Simulation
     /// <summary>
     /// Input device and HMD navigation simulator.
     /// </summary>
+    /// <remarks>
+    /// The execution order is set to ensure that the Input Simulator runs before the <see cref="UnityEngine.XR.Interaction.Toolkit.XRInteractionManager"/> component.
+    /// For determining this execution order the <see cref="XRInteractionUpdateOrder.k_DeviceSimulator"/> value is used, which is also used by XRI's
+    /// simulation.
+    /// </remarks>
     [AddComponentMenu("MRTK/Input/Input Simulator")]
+    [DefaultExecutionOrder(XRInteractionUpdateOrder.k_DeviceSimulator)]
     public class InputSimulator : MonoBehaviour
     {
         #region MonoBehaviour
@@ -22,7 +29,7 @@ namespace MixedReality.Toolkit.Input.Simulation
         /// A Unity event function that is called when an enabled script instance is being loaded.
         /// </summary>
         private void Awake()
-        {
+        {            
             ApplyControlSet(ControlSet);
         }
 
@@ -30,6 +37,7 @@ namespace MixedReality.Toolkit.Input.Simulation
             new ProfilerMarker("[MRTK] InputSimulator.Update");
 
         private bool isSimulating = true;
+
 
         /// <summary>
         /// A Unity event function that is called every frame, if this object is enabled.

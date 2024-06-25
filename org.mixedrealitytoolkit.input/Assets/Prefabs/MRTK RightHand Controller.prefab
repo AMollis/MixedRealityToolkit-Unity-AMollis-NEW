@@ -8,6 +8,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 326101086936934090, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
+      propertyPath: handNode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 326101086936934090, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
+      propertyPath: selectAction.m_Reference
+      value: 
+      objectReference: {fileID: 3279264004350380116, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
+    - target: {fileID: 326101086936934090, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
+      propertyPath: selectActionValue.m_Reference
+      value: 
+      objectReference: {fileID: 3279264004350380116, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
+    - target: {fileID: 326101086936934090, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
+      propertyPath: trackingStateInput.m_Reference
+      value: 
+      objectReference: {fileID: 3239510804178183174, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
     - target: {fileID: 1948193615953854874, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
       propertyPath: m_Name
       value: MRTK RightHand Controller
@@ -276,6 +292,22 @@ PrefabInstance:
       propertyPath: managedReferences[5].trackingStateActionProperty.m_Reference
       value: 
       objectReference: {fileID: 3239510804178183174, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
+    - target: {fileID: 3733240570438880630, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
+      propertyPath: handNode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3733240570438880630, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
+      propertyPath: m_PositionInput.m_Reference
+      value: 
+      objectReference: {fileID: -1813146318149588949, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
+    - target: {fileID: 3733240570438880630, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
+      propertyPath: m_RotationInput.m_Reference
+      value: 
+      objectReference: {fileID: 5820880757197039143, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
+    - target: {fileID: 3733240570438880630, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
+      propertyPath: m_TrackingStateInput.m_Reference
+      value: 
+      objectReference: {fileID: 3239510804178183174, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
     - target: {fileID: 3853158803892222464, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
       propertyPath: handNode
       value: 5
@@ -292,6 +324,22 @@ PrefabInstance:
       propertyPath: settings.handedness
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7593189726176066243, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
+      propertyPath: handNode
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7593189726176066243, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
+      propertyPath: selectAction.m_Reference
+      value: 
+      objectReference: {fileID: 187161793506945269, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
+    - target: {fileID: 7593189726176066243, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
+      propertyPath: selectActionValue.m_Reference
+      value: 
+      objectReference: {fileID: 2995356199736570127, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
+    - target: {fileID: 7593189726176066243, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
+      propertyPath: trackingStateInput.m_Reference
+      value: 
+      objectReference: {fileID: 3239510804178183174, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
     - target: {fileID: 7678414244376504105, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
       propertyPath: jointPoseSource.hand
       value: 2
@@ -299,6 +347,10 @@ PrefabInstance:
     - target: {fileID: 7833497039863265739, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
       propertyPath: settings.handedness
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9028998875765828509, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
+      propertyPath: m_CurrentTrackingState
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 9028998875765828509, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
       propertyPath: m_PositionInput.m_Reference

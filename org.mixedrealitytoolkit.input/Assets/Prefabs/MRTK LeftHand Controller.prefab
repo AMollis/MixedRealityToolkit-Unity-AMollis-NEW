@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2105872328799679035}
   - component: {fileID: 1360334431692699758}
   - component: {fileID: 1011521807071173904}
+  - component: {fileID: 7593189726176066243}
   m_Layer: 0
   m_Name: Far Ray
   m_TagString: Untagged
@@ -34,6 +35,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4049852131709971567}
   - {fileID: 1307666228887773622}
   - {fileID: 3988544559415115452}
   m_Father: {fileID: 1948193615953854875}
@@ -74,7 +76,7 @@ MonoBehaviour:
   m_StartingHoverFilters: []
   m_StartingSelectFilters: []
   m_SelectInput:
-    m_InputSourceMode: 2
+    m_InputSourceMode: 3
     m_InputActionPerformed:
       m_Name: Select
       m_Type: 1
@@ -95,7 +97,7 @@ MonoBehaviour:
       m_Flags: 0
     m_InputActionReferencePerformed: {fileID: -6131295136447488360, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
     m_InputActionReferenceValue: {fileID: -294446728694031702, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
-    m_ObjectReferenceObject: {fileID: 0}
+    m_ObjectReferenceObject: {fileID: 7593189726176066243}
     m_ManualPerformed: 0
     m_ManualValue: 0
     m_ManualQueuePerformed: 0
@@ -137,7 +139,7 @@ MonoBehaviour:
   m_AllowHoveredActivate: 0
   m_TargetPriorityMode: 0
   m_HideControllerOnSelect: 0
-  m_InputCompatibilityMode: 0
+  m_InputCompatibilityMode: 2
   m_PlayAudioClipOnSelectEntered: 0
   m_AudioClipForOnSelectEntered: {fileID: 0}
   m_PlayAudioClipOnSelectExited: 0
@@ -216,7 +218,7 @@ MonoBehaviour:
   m_OccludeARHitsWith2DObjects: 0
   m_ScaleMode: 0
   m_UIPressInput:
-    m_InputSourceMode: 2
+    m_InputSourceMode: 3
     m_InputActionPerformed:
       m_Name: UI Press
       m_Type: 1
@@ -237,7 +239,7 @@ MonoBehaviour:
       m_Flags: 0
     m_InputActionReferencePerformed: {fileID: -6395602842196007441, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
     m_InputActionReferenceValue: {fileID: -6395602842196007441, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
-    m_ObjectReferenceObject: {fileID: 0}
+    m_ObjectReferenceObject: {fileID: 326101086936934090}
     m_ManualPerformed: 0
     m_ManualValue: 0
     m_ManualQueuePerformed: 0
@@ -359,7 +361,7 @@ MonoBehaviour:
     m_InputActionReference: {fileID: 0}
     m_ObjectReferenceObject: {fileID: 0}
     m_ManualValue: 0
-  trackedPoseDriver: {fileID: 9028998875765828509}
+  trackedPoseDriver: {fileID: 0}
   aimPoseSource:
     rid: 0
   devicePoseSource:
@@ -658,6 +660,55 @@ MonoBehaviour:
   roundedCaps: 1
   stopLineAtFirstRaycastHit: 1
   lineStepCount: 16
+--- !u!114 &7593189726176066243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33891623947274355}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63844496262f1724ba77344d77fbf000, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handNode: 4
+  selectAction:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Select
+      m_Type: 1
+      m_ExpectedControlType: 
+      m_Id: d343d4e9-122d-4e64-a9a2-83402857825c
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: -6131295136447488360, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
+  selectActionValue:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Select Value
+      m_Type: 0
+      m_ExpectedControlType: Axis
+      m_Id: cae03eb6-abc3-4078-b87f-cc229d95b9cb
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: -294446728694031702, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
+  trackingStateInput:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Tracking State Input
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: df262231-3e4e-4aba-a201-90bfc418dd1c
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: -7613329581162844239, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
 --- !u!1 &313520819636509231
 GameObject:
   m_ObjectHideFlags: 0
@@ -823,7 +874,7 @@ MonoBehaviour:
   m_AllowHoveredActivate: 0
   m_TargetPriorityMode: 0
   m_HideControllerOnSelect: 0
-  m_InputCompatibilityMode: 0
+  m_InputCompatibilityMode: 2
   m_PlayAudioClipOnSelectEntered: 0
   m_AudioClipForOnSelectEntered: {fileID: 0}
   m_PlayAudioClipOnSelectExited: 0
@@ -976,7 +1027,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1948193615953854875}
   - component: {fileID: 6164080946324827545}
-  - component: {fileID: 9028998875765828509}
+  - component: {fileID: 3733240570438880630}
   - component: {fileID: 3853158803892222464}
   m_Layer: 0
   m_Name: MRTK LeftHand Controller
@@ -1231,7 +1282,7 @@ MonoBehaviour:
       m_Flags: 0
     m_Reference: {fileID: 0}
   handNode: 4
---- !u!114 &9028998875765828509
+--- !u!114 &3733240570438880630
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1240,7 +1291,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1948193615953854874}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2fadf230d1919748a9aa21d40f74619, type: 3}
+  m_Script: {fileID: 11500000, guid: 5af98ad782bb7df43838b825cd681336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_TrackingType: 0
@@ -1252,7 +1303,7 @@ MonoBehaviour:
       m_Name: Position
       m_Type: 0
       m_ExpectedControlType: Vector3
-      m_Id: cd2c4895-1dfe-4883-81d9-ff1d4b81f2e0
+      m_Id: 13f9334a-4c52-4cd6-b592-af294c4aa43c
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
@@ -1264,7 +1315,7 @@ MonoBehaviour:
       m_Name: Rotation
       m_Type: 0
       m_ExpectedControlType: Quaternion
-      m_Id: ca3498d7-fb68-4776-bfd9-71d4b6e67283
+      m_Id: 5a5cb8cb-2109-4483-aa3e-5ab67fed4815
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
@@ -1276,7 +1327,7 @@ MonoBehaviour:
       m_Name: Tracking State
       m_Type: 0
       m_ExpectedControlType: Integer
-      m_Id: 447fa40b-89bf-4f96-85f3-d5b06c92b640
+      m_Id: 543c7165-b463-4058-b011-48613341cef9
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
@@ -1286,7 +1337,7 @@ MonoBehaviour:
     m_Name: 
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 481154e0-2a0c-428a-b123-5af141803b03
+    m_Id: e131c6f7-81a3-4a2a-843e-987cf28e4182
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
@@ -1295,11 +1346,12 @@ MonoBehaviour:
     m_Name: 
     m_Type: 0
     m_ExpectedControlType: 
-    m_Id: 598d8cfb-763d-4057-a59c-8ef67ef9fc98
+    m_Id: 105464f9-141f-484b-ae11-a09cae580663
     m_Processors: 
     m_Interactions: 
     m_SingletonActionBindings: []
     m_Flags: 0
+  handNode: 4
 --- !u!114 &3853158803892222464
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1450,7 +1502,7 @@ MonoBehaviour:
   m_AllowHoveredActivate: 0
   m_TargetPriorityMode: 0
   m_HideControllerOnSelect: 0
-  m_InputCompatibilityMode: 0
+  m_InputCompatibilityMode: 2
   m_PlayAudioClipOnSelectEntered: 0
   m_AudioClipForOnSelectEntered: {fileID: 0}
   m_PlayAudioClipOnSelectExited: 0
@@ -1483,7 +1535,7 @@ MonoBehaviour:
   m_HapticHoverCancelIntensity: 0
   m_HapticHoverCancelDuration: 0
   m_AllowHoverHapticsWhileSelecting: 1
-  trackedPoseDriver: {fileID: 9028998875765828509}
+  trackedPoseDriver: {fileID: 0}
   pokePoseSource:
     rid: 0
   references:
@@ -1556,6 +1608,87 @@ MonoBehaviour:
   baseReticle: {fileID: 8086910922498750391}
   pokeInteractor: {fileID: 1948193616346090107}
   proximityLight: {fileID: 3552666654439622812}
+--- !u!1 &2393536901482574155
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4049852131709971567}
+  - component: {fileID: 326101086936934090}
+  m_Layer: 0
+  m_Name: UIPressButtonReader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4049852131709971567
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2393536901482574155}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4332395624789801014}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &326101086936934090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2393536901482574155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63844496262f1724ba77344d77fbf000, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  handNode: 4
+  selectAction:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Select
+      m_Type: 1
+      m_ExpectedControlType: 
+      m_Id: d343d4e9-122d-4e64-a9a2-83402857825c
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: -6395602842196007441, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
+  selectActionValue:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Select Value
+      m_Type: 0
+      m_ExpectedControlType: Axis
+      m_Id: cae03eb6-abc3-4078-b87f-cc229d95b9cb
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: -6395602842196007441, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
+  trackingStateInput:
+    m_UseReference: 1
+    m_Action:
+      m_Name: Tracking State Input
+      m_Type: 0
+      m_ExpectedControlType: 
+      m_Id: df262231-3e4e-4aba-a201-90bfc418dd1c
+      m_Processors: 
+      m_Interactions: 
+      m_SingletonActionBindings: []
+      m_Flags: 0
+    m_Reference: {fileID: -7613329581162844239, guid: 18c412191cdc9274897f101c7fd5316f, type: 3}
 --- !u!1 &4299642553989019656
 GameObject:
   m_ObjectHideFlags: 0
@@ -1675,9 +1808,6 @@ MonoBehaviour:
   jointPoseSource:
     hand: 1
     joint: 10
-  migratedSuccessfully: 1
-  hand: 1
-  joint: 10
 --- !u!1 &5224294193116514423
 GameObject:
   m_ObjectHideFlags: 0
@@ -1810,7 +1940,7 @@ MonoBehaviour:
   m_AllowHoveredActivate: 0
   m_TargetPriorityMode: 0
   m_HideControllerOnSelect: 0
-  m_InputCompatibilityMode: 0
+  m_InputCompatibilityMode: 2
   m_PlayAudioClipOnSelectEntered: 0
   m_AudioClipForOnSelectEntered: {fileID: 0}
   m_PlayAudioClipOnSelectExited: 0
@@ -1843,7 +1973,7 @@ MonoBehaviour:
   m_HapticHoverCancelIntensity: 0
   m_HapticHoverCancelDuration: 0
   m_AllowHoverHapticsWhileSelecting: 1
-  trackedPoseDriver: {fileID: 9028998875765828509}
+  trackedPoseDriver: {fileID: 0}
   handController: {fileID: 6164080946324827545}
   devicePoseSource:
     rid: 0

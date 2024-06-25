@@ -566,6 +566,10 @@ PrefabInstance:
       propertyPath: m_UpdateType
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6058071957502615222, guid: d8a2a1f4b4f78754c86045f7a36fe424, type: 3}
+      propertyPath: m_CurrentTrackingState
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 6853218870844938225, guid: d8a2a1f4b4f78754c86045f7a36fe424, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -698,27 +702,35 @@ PrefabInstance:
       propertyPath: dependentInteractor
       value: 
       objectReference: {fileID: 529201713281613631}
+    - target: {fileID: 4509401391618674266, guid: 2e5b90c191b94004182e55a48f0ca427, type: 3}
+      propertyPath: m_HideControllerOnSelect
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6947698589674946202, guid: 2e5b90c191b94004182e55a48f0ca427, type: 3}
+      propertyPath: m_CurrentTrackingState
+      value: -1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2e5b90c191b94004182e55a48f0ca427, type: 3}
---- !u!114 &3915442999186804333 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6947698589674946202, guid: 2e5b90c191b94004182e55a48f0ca427, type: 3}
-  m_PrefabInstance: {fileID: 6214226033703350519}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2fadf230d1919748a9aa21d40f74619, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &5769779419222680683 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 445577537456690332, guid: 2e5b90c191b94004182e55a48f0ca427, type: 3}
   m_PrefabInstance: {fileID: 6214226033703350519}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8706621975405766790 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3380372812231661681, guid: 2e5b90c191b94004182e55a48f0ca427, type: 3}
+  m_PrefabInstance: {fileID: 6214226033703350519}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5af98ad782bb7df43838b825cd681336, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7089027141941546269
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -734,11 +746,11 @@ PrefabInstance:
     - target: {fileID: 919676360596656614, guid: 02502921f64c38d48b14f1d6c2438b16, type: 3}
       propertyPath: leftHandTrackedPoseDriver
       value: 
-      objectReference: {fileID: 251758394784793142}
+      objectReference: {fileID: 5619433274391962845}
     - target: {fileID: 919676360596656614, guid: 02502921f64c38d48b14f1d6c2438b16, type: 3}
       propertyPath: rightHandTrackedPoseDriver
       value: 
-      objectReference: {fileID: 3915442999186804333}
+      objectReference: {fileID: 8706621975405766790}
     - target: {fileID: 7821592117992173381, guid: 02502921f64c38d48b14f1d6c2438b16, type: 3}
       propertyPath: m_Name
       value: MRTK Interaction Manager
@@ -864,20 +876,24 @@ PrefabInstance:
       propertyPath: dependentInteractor
       value: 
       objectReference: {fileID: 529201713281613631}
+    - target: {fileID: 9028998875765828509, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
+      propertyPath: m_CurrentTrackingState
+      value: -1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
---- !u!114 &251758394784793142 stripped
+--- !u!114 &5619433274391962845 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9028998875765828509, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
+  m_CorrespondingSourceObject: {fileID: 3733240570438880630, guid: 90f955d6c9d709448a0b1e29e1f9c046, type: 3}
   m_PrefabInstance: {fileID: 9093645396457204139}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2fadf230d1919748a9aa21d40f74619, type: 3}
+  m_Script: {fileID: 11500000, guid: 5af98ad782bb7df43838b825cd681336, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &7294214612838230064 stripped
