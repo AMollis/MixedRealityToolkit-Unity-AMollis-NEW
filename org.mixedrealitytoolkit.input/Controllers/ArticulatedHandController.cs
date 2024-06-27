@@ -105,10 +105,6 @@ namespace MixedReality.Toolkit.Input
 
                     if (!selectActionValue.action.HasAnyControls() || isTrackingStatePolyfilled)
                     {
-                        if (pinchAmount > 0)
-                        {
-                            Debug.Log($"ATM selectActionValue is not bound to any control, or is being polyfilled. Setting selectInteractionState.value to {pinchAmount} (isTrackingStatePolyfilled = {isTrackingStatePolyfilled})");
-                        }
                         controllerState.selectInteractionState.value = pinchAmount;
                     }
 
@@ -122,10 +118,6 @@ namespace MixedReality.Toolkit.Input
 
                     if (!uiPressActionValue.action.HasAnyControls() || isTrackingStatePolyfilled)
                     {
-                        if (pinchAmount > 0)
-                        {
-                          //  Debug.Log($"ATM uiPressInteractionState is not bound to any control, or is being polyfilled. Setting selectInteractionState.value to {pinchAmount}  (isTrackingStatePolyfilled = {isTrackingStatePolyfilled})");
-                        }
                         controllerState.uiPressInteractionState.value = pinchAmount;
                     }
 
