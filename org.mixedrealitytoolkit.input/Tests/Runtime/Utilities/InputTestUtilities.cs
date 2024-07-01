@@ -14,10 +14,6 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 using Object = UnityEngine.Object;
 
-
-
-
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -140,10 +136,6 @@ namespace MixedReality.Toolkit.Input.Tests
             Object rigPrefab = AssetDatabase.LoadAssetAtPath(version == RigVersion.Version1 ? MRTKRigPrefabPath : MRTKControllerlessRigPrefabPath, typeof(Object));
             rigReference = Object.Instantiate(rigPrefab) as GameObject;
 
-            // TODO: Remove explict disablement of speech once the new rig has speech off by default, like the old rig.
-            SpeechInteractor speechInteractor = FindObjectUtility.FindAnyObjectByType<SpeechInteractor>(true);
-            speechInteractor.gameObject.SetActive(false);
-
             return rigReference;
         }
 
@@ -262,13 +254,13 @@ namespace MixedReality.Toolkit.Input.Tests
         }
 
         /// <summary>
-        /// Invoked after the input system is updated.
+        /// Invoked to tick the update of hands. Calling this is required to process hand updates and move the hands to their new positions.
         /// </summary>
-        public static void OnAfterUpdate()
+        public static void UpdateSimulation()
         {
             if (HandUpdates.TryPeek(out HandUpdate handUpdate))
             {
-                if (!handUpdate.Update())
+                if (handUpdate.Update())
                 {
                     HandUpdates.TryDequeue(out _);
                 }
@@ -337,7 +329,7 @@ namespace MixedReality.Toolkit.Input.Tests
             });
 
             HandUpdates.Enqueue(handUpdate);
-            while (!handUpdate.Completed)
+            while (!handUpdate.IsCompleted)
             {
                 yield return null;
             }
@@ -697,7 +689,6 @@ namespace MixedReality.Toolkit.Input.Tests
             yield return null;
         }
 
-
         /// <summary>
         /// The version of the MRTK rig to create for the tests.
         /// </summary>
@@ -723,7 +714,7 @@ namespace MixedReality.Toolkit.Input.Tests
         /// <summary>
         /// Represents the state of a hand update request.
         /// </summary>
-        private struct HandUpdateRequest
+        internal struct HandUpdateRequest
         {
             /// <summary>
             /// The total number of steps for this update to take.
@@ -757,7 +748,7 @@ namespace MixedReality.Toolkit.Input.Tests
             public HandshapeId handShape;
 
             /// <summary>
-            /// The simulate controller that represents the hand. This is the controller that will be updated, moved,
+            /// The simulated controller that represents the hand. This is the controller that will be updated, moved,
             /// and rotated.
             /// </summary>
             public SimulatedController controller;
@@ -778,18 +769,17 @@ namespace MixedReality.Toolkit.Input.Tests
         /// </summary>
         /// <remarks>
         /// This allows updates to be executed at a particular time within the update loop. For example, the caller
-        /// may want to hand's updates to tick immediately after the input system has performed its updates. This can
+        /// may want hand's updates to tick immediately after the input system has performed its updates. This can
         /// be important since the input system is particular on when and input action is "performed this frame".
         /// Updates to the hand controller can result in a selection action to be trigger. In order for an action to
         /// work, the update times of an input action's <see cref="InputActionState.TriggerState.lastPerformedInUpdate"/>
         /// need to match exactly with the frame counter the action was actually updated in, see
         /// `InputSystem.LowLevel.InputUpdate.s_UpdateStepCount`. This counter, `InputUpdate.s_UpdateStepCount`, is
-        /// updated during <see cref="InputSystem.onBeforeUpdate"/>and before <see cref="XRInteractionManager"/> is
-        /// updated. This means that the hand controller updates need to happen immediately after
-        /// <see cref="InputSystem.onAfterUpdate"/> so that <see cref="XRInteractionManager"/> is able see a proper
-        /// update of the hand controller's selection.
+        /// updated during <see cref="InputSystem.onBeforeUpdate"/> and before <see cref="XRInteractionManager"/> is
+        /// updated. This means that the hand controller updates need to happen during <see cref="InputSystem.onAfterUpdate"/>
+        /// so that <see cref="XRInteractionManager"/> is able see a proper update of the hand controller's selection.
         /// </summary>
-        private class HandUpdate
+        internal class HandUpdate
         {
             private int currentStep = 1;
             private HandUpdateRequest request;
@@ -809,55 +799,54 @@ namespace MixedReality.Toolkit.Input.Tests
             /// <summary>
             /// Get if the hand update is completed. This is true when the hand has reached its final position and rotation.
             /// </summary>
-            public bool Completed => currentStep > request.totalSteps;
+            public bool IsCompleted => currentStep > request.totalSteps;
 
             /// <summary>
-            /// Update the hand controller based on the given update state. Returns true if the hand was updated.
+            /// Update the hand controller based on the given update state. Returns true if the hand update was completed.
             /// </summary>
             public bool Update()
             {
-                bool updated = false;
-
-                if (currentStep <= request.totalSteps)
+                if (IsCompleted)
                 {
-                    updated = true;
-                    if (firstUpdate)
-                    {
-                        firstUpdate = false;
-                        startingPinchAmount = request.controls.TriggerAxis;
-                        isPinching = request.handShape == HandshapeId.Grab ||
-                            request.handShape == HandshapeId.Pinch ||
-                            request.handShape == HandshapeId.PinchSteadyWrist;
-                    }
+                    return true;
+                }
 
-                    float t = currentStep / (float)request.totalSteps;
+                if (firstUpdate)
+                {
+                    firstUpdate = false;
+                    startingPinchAmount = request.controls.TriggerAxis;
+                    isPinching = request.handShape == HandshapeId.Grab ||
+                        request.handShape == HandshapeId.Pinch ||
+                        request.handShape == HandshapeId.PinchSteadyWrist;
+                }
 
-                    Pose handPose = new Pose(
-                        Vector3.Lerp(request.startPosition, request.endPosition, t),
-                        Quaternion.Lerp(request.startRotation, request.endRotation, t)
-                    );
-                    float pinchAmount = Mathf.Lerp(startingPinchAmount, isPinching ? 1 : 0, t);
+                float t = currentStep / (float)request.totalSteps;
 
-                    request.controls.TriggerAxis = pinchAmount;
-                    switch (request.anchorPoint)
-                    {
-                        // We always pass in useRayVector = false during unit tests, because we always want the pointerPosition
-                        // to match the devicePosition so that we can aim the "hand" wherever we'd like. Otherwise, we'd
-                        // be using the generated hand-joint-based ray vector which is unreliable to aim from automated tests.
-                        case ControllerAnchorPoint.Device:
-                            request.controller.UpdateAbsolute(handPose, request.controls, ControllerRotationMode.UserControl, false);
-                            break;
-                        case ControllerAnchorPoint.IndexFinger:
-                            request.controller.UpdateAbsoluteWithPokeAnchor(handPose, request.controls, ControllerRotationMode.UserControl, false);
-                            break;
-                        case ControllerAnchorPoint.Grab:
-                            request.controller.UpdateAbsoluteWithGrabAnchor(handPose, request.controls, ControllerRotationMode.UserControl, false);
-                            break;
-                    }
+                Pose handPose = new Pose(
+                    Vector3.Lerp(request.startPosition, request.endPosition, t),
+                    Quaternion.Lerp(request.startRotation, request.endRotation, t)
+                );
+                float pinchAmount = Mathf.Lerp(startingPinchAmount, isPinching ? 1 : 0, t);
+
+                request.controls.TriggerAxis = pinchAmount;
+                switch (request.anchorPoint)
+                {
+                    // We always pass in useRayVector = false during unit tests, because we always want the pointerPosition
+                    // to match the devicePosition so that we can aim the "hand" wherever we'd like. Otherwise, we'd
+                    // be using the generated hand-joint-based ray vector which is unreliable to aim from automated tests.
+                    case ControllerAnchorPoint.Device:
+                        request.controller.UpdateAbsolute(handPose, request.controls, ControllerRotationMode.UserControl, false);
+                        break;
+                    case ControllerAnchorPoint.IndexFinger:
+                        request.controller.UpdateAbsoluteWithPokeAnchor(handPose, request.controls, ControllerRotationMode.UserControl, false);
+                        break;
+                    case ControllerAnchorPoint.Grab:
+                        request.controller.UpdateAbsoluteWithGrabAnchor(handPose, request.controls, ControllerRotationMode.UserControl, false);
+                        break;
                 }
 
                 currentStep++;
-                return updated;
+                return IsCompleted;
             }
         }
     }

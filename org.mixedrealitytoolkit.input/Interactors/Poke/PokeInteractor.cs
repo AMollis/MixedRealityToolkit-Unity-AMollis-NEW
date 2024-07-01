@@ -22,7 +22,8 @@ namespace MixedReality.Toolkit.Input
         XRBaseInputInteractor,
         IPokeInteractor,
         IHandedInteractor,
-        IModeManagedInteractor
+        IModeManagedInteractor,
+        ITrackedInteractor
     {
         #region PokeInteractor
 
@@ -35,7 +36,7 @@ namespace MixedReality.Toolkit.Input
         protected internal TrackedPoseDriver TrackedPoseDriver => trackedPoseDriver;
 
         [SerializeField]
-        [Tooltip("The root management GameObject that interactor belongs to. T")]
+        [Tooltip("The root management GameObject that interactor belongs to.")]
         private GameObject modeManagedRoot = null;
 
         /// <summary>
@@ -319,10 +320,27 @@ namespace MixedReality.Toolkit.Input
 
         #endregion XRBaseInteractor
 
+        #region ITrackedInteractor
+        /// <inheritdoc />
+        public GameObject TrackedParent => trackedPoseDriver == null ? null : trackedPoseDriver.gameObject;
+        #endregion ITrackedInteractor
+
         #region IModeManagedInteractor
         /// <inheritdoc/>
         [Obsolete("This function is obsolete and will be removed in the next major release. Use ModeManagedRoot instead.")]
-        public GameObject GetModeManagedController() => ModeManagedRoot;
+        public GameObject GetModeManagedController()
+        {
+            // Legacy controller-based interactors should return null, so the legacy controller-based logic in the
+            // interaction mode manager is used instead.
+#pragma warning disable CS0618 // Type or member is obsolete 
+            if (forceDeprecatedInput)
+            {
+                return null;
+            }
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            return ModeManagedRoot;
+        }
         #endregion IModeManagedInteractor
     }
 }

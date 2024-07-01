@@ -19,7 +19,8 @@ namespace MixedReality.Toolkit.Input
     public abstract class HandJointInteractor :
         XRDirectInteractor,
         IHandedInteractor,
-        IModeManagedInteractor
+        IModeManagedInteractor,
+        ITrackedInteractor
     {
         #region Serialized Fields
         [SerializeField, Tooltip("Holds a reference to the <see cref=\"TrackedPoseDriver\"/> associated to this interactor if it exists.")]
@@ -59,6 +60,11 @@ namespace MixedReality.Toolkit.Input
 
         #endregion HandJointInteractor
 
+        #region ITrackedInteractor
+        /// <inheritdoc />
+        public GameObject TrackedParent => trackedPoseDriver == null ? null : trackedPoseDriver.gameObject;
+        #endregion ITrackedInteractor
+
         #region IHandedInteractor
 
         /// <inheritdoc/>
@@ -72,7 +78,7 @@ namespace MixedReality.Toolkit.Input
         #region XRBaseInteractor
 
         /// <summary>
-        /// Used to keep track of whether the controller has an interaction point.
+        /// Used to keep track of whether the `TrackedPoseDriver` or controller (if using deprecated XRI) has an interaction point.
         /// </summary>
         private bool interactionPointTracked;
 
@@ -81,7 +87,7 @@ namespace MixedReality.Toolkit.Input
         /// </summary>
         public override bool isHoverActive
         {
-            // Only be available for hovering if the controller is tracked or we have joint data.
+            // Only be available for hovering if the `TrackedPoseDriver` or controller (if using deprecated XRI) pose driver is tracked or we have joint data.
             get
             {
                 bool result = base.isHoverActive;
@@ -139,7 +145,7 @@ namespace MixedReality.Toolkit.Input
                     }
                     else
                     {
-                        // If we don't have a joint pose, reset to whatever our parent XRController's pose is.
+                        // If we don't have a joint pose, reset to whatever our parent `TrackedPoseDriver` pose is.
                         transform.localPosition = Vector3.zero;
                         transform.localRotation = Quaternion.identity;
                     }
@@ -154,7 +160,19 @@ namespace MixedReality.Toolkit.Input
         #region IModeManagedInteractor
         /// <inheritdoc/>
         [Obsolete("This function is obsolete and will be removed in the next major release. Use ModeManagedRoot instead.")]
-        public GameObject GetModeManagedController() => ModeManagedRoot;
+        public GameObject GetModeManagedController()
+        {
+            // Legacy controller-based interactors should return null, so the legacy controller-based logic in the
+            // interaction mode manager is used instead.
+#pragma warning disable CS0618 // Type or member is obsolete 
+            if (forceDeprecatedInput)
+            {
+                return null;
+            }
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            return ModeManagedRoot;
+        }
         #endregion IModeManagedInteractor
 
         #region Unity Event Functions

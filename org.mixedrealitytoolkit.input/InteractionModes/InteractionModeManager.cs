@@ -15,7 +15,7 @@ using TrackedPoseDriver = UnityEngine.InputSystem.XR.TrackedPoseDriver;
 namespace MixedReality.Toolkit.Input
 {
     /// <summary>
-    /// Used to manage interactors and ensure that each several interactors for an internactor group aren't clashing and firing at the same time.
+    /// Used to manage interactors and ensure that each several interactors for an interactor group aren't clashing and firing at the same time.
     /// </summary>
     [AddComponentMenu("MRTK/Input/Interaction Mode Manager")]
     public class InteractionModeManager : MonoBehaviour
@@ -104,11 +104,11 @@ namespace MixedReality.Toolkit.Input
                 }
             }
 
-            // For backwards capatability, we will continue to support the obsolete "controller" types, and group based on "controller" partents.
+            // For backwards compatibility, we will continue to support the obsolete "controller" types, and group based on "controller" parents.
             // Once XRI removes "controller" types, we can remove this block of code.
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 // InitializeControllers is obsolete
             InitializeControllers();
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618 // InitializeControllers is obsolete
         }
 
         /// <summary>
@@ -170,14 +170,14 @@ namespace MixedReality.Toolkit.Input
         private List<IInteractionModeDetector> interactionModeDectectors = new List<IInteractionModeDetector>();
 
         /// <summary>
-        /// Mapping of the root game objects to the set of interactors tha will be managed as a group.
+        /// Mapping of the root game objects to the set of interactors that will be managed as a group.
         /// </summary>
         /// <remarks>
         /// The MRTK Interaction Mode Manager will only mediate interactors which are designated as managed.
         /// </remarks>
         [SerializeField]
         [FormerlySerializedAs("controllerMapping")]
-        [Tooltip("Mapping of the root game objects to the set of interactors tha will be managed as a group. The MRTK Interaction Mode Manager will only mediate interactors which are designated as managed")]
+        [Tooltip("Mapping of the root game objects to the set of interactors that will be managed as a group. The MRTK Interaction Mode Manager will only mediate interactors which are designated as managed")]
         private SerializableDictionary<GameObject, ManagedInteractorStatus> interactorGroupMappings = new SerializableDictionary<GameObject, ManagedInteractorStatus>();
 
         /// <summary>
@@ -432,11 +432,12 @@ namespace MixedReality.Toolkit.Input
                 {
                     List<GameObject> groups = detector.GetInteractorGroups();
 
+                    // For backwards compatibility, we will continue to support the obsolete "GetControllers()" function.
                     if (groups == null)
                     {
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 // GetControllers is obsolete
                         groups = detector.GetControllers();
-#pragma warning restore CS0618 // Type or member is obsolete
+#pragma warning restore CS0618 // GetControllers is obsolete
                     }
 
                     foreach (GameObject group in groups)
@@ -555,26 +556,26 @@ namespace MixedReality.Toolkit.Input
         {
             GameObject interactorGroupObject = null;
 
-            if (interactor is IModeManagedInteractor modeManagedInteractor)
+            // For backwards compatibility, we will continue to support the obsolete "controller-based" interactors,
+            // and group based on "controller" partents.
+#pragma warning disable CS0618 // xrController is obsolete
+            if (interactor is XRBaseInputInteractor controllerInteractor &&
+                controllerInteractor.xrController != null)
+            {
+                interactorGroupObject = controllerInteractor.xrController.gameObject;
+            }
+#pragma warning restore CS0618 // xrController is obsolete
+            else if (interactor is IModeManagedInteractor modeManagedInteractor)
             {
                 interactorGroupObject = modeManagedInteractor.ModeManagedRoot;
 
                 // For backwards compatibility, we will continue to support the obsolete "GetModeManagedController()" function.
                 if (interactorGroupObject == null)
                 {
-#pragma warning disable CS0618 // Type or member is obsolete
+#pragma warning disable CS0618 // GetModeManagedController is obsolete
                     interactorGroupObject = modeManagedInteractor.GetModeManagedController();
 #pragma warning restore CS0618 // Type or member is obsolete
                 }
-            }
-
-            // For backwards compatibility, we will continue to support the obsolete "controller" types, and group based on "controller" partents.
-            if (interactorGroupObject == null &&
-                interactor is XRBaseInputInteractor controllerInteractor)
-            {
-#pragma warning disable CS0618 // Type or member is obsolete
-                interactorGroupObject = controllerInteractor.xrController.gameObject;
-#pragma warning restore CS0618 // Type or member is obsolete
             }
 
             return interactorGroupObject;

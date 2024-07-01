@@ -3,11 +3,9 @@
 
 using System;
 using System.Collections.Generic;
-using MixedReality.Toolkit.Subsystems;
 using Unity.Profiling;
 using UnityEngine;
 using UnityEngine.InputSystem.XR;
-using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
@@ -31,7 +29,8 @@ namespace MixedReality.Toolkit.Input
         IRayInteractor,
         IHandedInteractor,
         IVariableSelectInteractor,
-        IModeManagedInteractor
+        IModeManagedInteractor,
+        ITrackedInteractor
     {
         #region MRTKRayInteractor
 
@@ -68,7 +67,28 @@ namespace MixedReality.Toolkit.Input
         /// <summary>
         /// Is this ray currently selecting a UnityUI/Canvas element?
         /// </summary>
-        public bool HasUISelection => HasUIHover && isUISelectActive;
+        public bool HasUISelection
+        {
+            get
+            {
+                bool hasUISelection = HasUIHover;
+#pragma warning disable CS0618 // isUISelectActive is obsolete
+                if (forceDeprecatedInput)
+                {
+                    hasUISelection &= isUISelectActive;
+                }
+#pragma warning restore CS0618 // isUISelectActiver is obsolete
+                else if (uiPressInput != null)
+                {
+                    hasUISelection &= uiPressInput.ReadIsPerformed();
+                }
+                else
+                {
+                    hasUISelection = false;
+                }
+                return hasUISelection;
+            }
+        }
 
         /// <summary>
         /// Used to check if the parent controller is tracked or not
@@ -121,8 +141,14 @@ namespace MixedReality.Toolkit.Input
 
         #endregion MRTKRayInteractor
 
+        #region ITrackedInteractor
+        /// <inheritdoc />
+        public GameObject TrackedParent => trackedPoseDriver == null ? null : trackedPoseDriver.gameObject;
+        #endregion ITrackedInteractor
+
         #region IHandedInteractor
 
+        /// <inheritdoc />
         Handedness IHandedInteractor.Handedness
         {
             get
@@ -159,13 +185,7 @@ namespace MixedReality.Toolkit.Input
 #pragma warning restore CS0618
                 else if (selectInput != null)
                 {
-                    float value = selectInput.ReadValue();
-                    if (value <= 0.0)
-                    {
-                       //Debug.LogWarning($"Zero SelectProgress for {name}. Is the select input configured correctly?");
-                    }
-                    return value;
-
+                    return selectInput.ReadValue();
                 }
                 else
                 {
@@ -330,7 +350,19 @@ namespace MixedReality.Toolkit.Input
         #region IModeManagedInteractor
         /// <inheritdoc/>
         [Obsolete("This function is obsolete and will be removed in the next major release. Use ModeManagedRoot instead.")]
-        public GameObject GetModeManagedController() => ModeManagedRoot;
+        public GameObject GetModeManagedController()
+        {
+            // Legacy controller-based interactors should return null, so the legacy controller-based logic in the
+            // interaction mode manager is used instead.
+#pragma warning disable CS0618 // Type or member is obsolete 
+            if (forceDeprecatedInput)
+            {
+                return null;
+            }
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            return ModeManagedRoot;
+        }
         #endregion IModeManagedInteractor
 
         #region Unity Event Functions

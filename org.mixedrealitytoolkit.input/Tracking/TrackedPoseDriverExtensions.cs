@@ -23,7 +23,7 @@ namespace MixedReality.Toolkit.Input
                 return false;
             }
 
-            if (trackingStateAction.enabled)
+            if (!trackingStateAction.enabled)
             {
                 return false;
             }
@@ -42,11 +42,11 @@ namespace MixedReality.Toolkit.Input
         /// </summary>
         /// <remarks>
         /// If the <see cref="TrackedPoseDriver"/> has no tracking state action or the action has no bindings, it will return `<see cref="InputTrackingState.Position"/> |
-        /// <see cref="InputTrackingState.Rotation"/>`. If the action is enabled, it will return `<see cref="InputTrackingState.None"/>`. If the action has controls, it will return the value of the action.
+        /// <see cref="InputTrackingState.Rotation"/>`. If the action is disabled, it will return `<see cref="InputTrackingState.None"/>`. If the action has controls, it will return the value of the action.
         /// </remarks>
         public static InputTrackingState GetInputTrackingState(this TrackedPoseDriver driver)
         {
-            // If the driver is a HandPoseDriver, return the cached value, istead of hitting the overhead of querying the action.
+            // If the driver is a HandPoseDriver, return the cached value, instead of hitting the overhead of querying the action.
             if (driver is HandPoseDriver handPoseDriver)
             {
                 return handPoseDriver.CachedTrackingState;
@@ -61,14 +61,14 @@ namespace MixedReality.Toolkit.Input
         /// </summary>
         /// <remarks>
         /// If the <see cref="TrackedPoseDriver"/> has no tracking state action or the action has no bindings, it will return `<see cref="InputTrackingState.Position"/> |
-        /// <see cref="InputTrackingState.Rotation"/>`. If the action is enabled, it will return `<see cref="InputTrackingState.None"/>`. If the action has controls, it will return the value of the action.
+        /// <see cref="InputTrackingState.Rotation"/>`. If the action is disabled, it will return `<see cref="InputTrackingState.None"/>`. If the action has controls, it will return the value of the action.
         /// </remarks>
         internal static InputTrackingState GetInputTrackingStateNoCache(this TrackedPoseDriver driver)
         {
             // Note, that the logic in this class is meant to reproduce the same logic as the base. The base
             // `TrackedPoseDriver` also sets the tracking state in a similar manner. Please see 
             // `TrackedPoseDriver::ReadTrackingState`. Replicating this logic in a subclass is not ideal, but it is
-            // necessary since the base class does not expose the tracking static update logic.
+            // necessary since the base class does not expose its tracking status field.
 
             var trackingStateAction = driver.trackingStateInput.action;
             if (trackingStateAction == null || trackingStateAction.bindings.Count == 0)
