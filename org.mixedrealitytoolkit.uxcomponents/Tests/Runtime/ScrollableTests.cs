@@ -30,6 +30,11 @@ namespace MixedReality.Toolkit.UX.Runtime.Tests
         bool firstPressableButtonClicked;
         Vector2 startScrollPosition;
 
+        /// <summary>
+        /// Get the version of the input rig to use with these tests
+        /// </summary>
+        protected override Input.Tests.InputTestUtilities.RigVersion RigVersion { get; } = Input.Tests.InputTestUtilities.RigVersion.Version2;
+
         [SetUp]
         public void Init()
         {
